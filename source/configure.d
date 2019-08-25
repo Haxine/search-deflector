@@ -10,6 +10,8 @@ import std.json: JSONValue;
 import std.stdio: writeln;
 import std.utf: toUTF16z;
 
+// import core.runtime: Runtime;
+
 import qte5;
 
 import common: mergeAAs, openUri, parseConfig, createErrorDialog,
@@ -19,11 +21,14 @@ import common: mergeAAs, openUri, parseConfig, createErrorDialog,
 import updater: compareVersions, startInstallUpdate, compareVersions, getReleaseAsset, getLatestRelease;
 
 int main(string[] argv) {
-    QApplication app = new QApplication(argv.length, argv.idup, true);
+    // auto args = Runtime.cArgs;
 
-    app.setOrganizationName("spikespaz");
-    app.setApplicationName("Search Deflector");
-    app.setApplicationVersion(PROJECT_VERSION ~ ".0");
+    // QApplication app = new QApplication(&args.argc, args.argv, true);
+    QApplication app = new QApplication(null, null, true);
+
+    // app.setOrganizationName("spikespaz");
+    // app.setApplicationName("Search Deflector");
+    // app.setApplicationVersion(PROJECT_VERSION ~ ".0");
 
     MainWindow window = new MainWindow();
 
@@ -33,126 +38,126 @@ int main(string[] argv) {
 }
 
 class MainWindow : QDialog {
-    SettingsSyncApi settings;
+    // SettingsSyncApi settings;
 
-    QComboBox browserName;
-    QComboBox engineName;
+    // QComboBox browserName;
+    // QComboBox engineName;
 
-    QLineEdit browserPath;
-    QLineEdit engineUrl;
+    // QLineEdit browserPath;
+    // QLineEdit engineUrl;
 
     this(QWidget parent = null, QtE.WindowType fl = QtE.WindowType.Widget) {
         super(parent, fl);
 
-        uint failures = 0;
-        string failureMessage;
+        // uint failures = 0;
+        // string failureMessage;
 
-        this._requireInternetConnection(failureMessage);
-        createWarningDialog(failureMessage);
+        // this._requireInternetConnection(failureMessage);
+        // createWarningDialog(failureMessage);
 
-        this.createWidgets();
+        // this.createWidgets();
 
-        this.settings = SettingsSyncApi(this);
+        // this.settings = SettingsSyncApi(this);
 
-        this._populateWidgetDefaults();
-        this._setDefaultStates();
+        // this._populateWidgetDefaults();
+        // this._setDefaultStates();
     }
 
-    struct SettingsSyncApi {
-        private MainWindow parent;
-        private DeflectorSettings settings;
-        private string[string] engines;
-        private string[string] browsers;
+    // struct SettingsSyncApi {
+    //     private MainWindow parent;
+    //     private DeflectorSettings settings;
+    //     private string[string] engines;
+    //     private string[string] browsers;
 
-        this(MainWindow parent) {
-            this.parent = parent;
-        }
+    //     this(MainWindow parent) {
+    //         this.parent = parent;
+    //     }
 
-        void browserPath(const string value) {
-            if (value == "" || validateExecutablePath(value)) {
-                this.settings.browserPath = value;
-                this.parent.browserPath.setText(value);
-            }
-        }
+    //     void browserPath(const string value) {
+    //         if (value == "" || validateExecutablePath(value)) {
+    //             this.settings.browserPath = value;
+    //             this.parent.browserPath.setText(value);
+    //         }
+    //     }
 
-        void browserName(const string value) {
-            assert((["Custom", "System Default", ""] ~ this.browsers.keys).canFind(value),
-                "Browser name is an unexpected value: " ~ value);
+    //     void browserName(const string value) {
+    //         assert((["Custom", "System Default", ""] ~ this.browsers.keys).canFind(value),
+    //             "Browser name is an unexpected value: " ~ value);
 
-            switch (value) {
-                case "Custom":
-                    goto case "";
-                case "System Default":
-                    goto case "";
-                case "":
-                    this.browserPath = "";
-                    break;
-                default:
-                    foreach(string item; this.browsers.keys)
-                        if (value == item) {
-                            this.browserPath = this.browsers[item];
-                            this.parent.browserPath.setText(this.browserPath);
-                            this.parent.browserName.setCurrentText(this.browserPath);
-                            break;
-                        }
-            }
-        }
+    //         switch (value) {
+    //             case "Custom":
+    //                 goto case "";
+    //             case "System Default":
+    //                 goto case "";
+    //             case "":
+    //                 this.browserPath = "";
+    //                 break;
+    //             default:
+    //                 foreach(string item; this.browsers.keys)
+    //                     if (value == item) {
+    //                         this.browserPath = this.browsers[item];
+    //                         this.parent.browserPath.setText(this.browserPath);
+    //                         // this.parent.browserName.setCurrentText(this.browserPath);
+    //                         break;
+    //                     }
+    //         }
+    //     }
 
-        void engineUrl(const string value) {
-            if (validateEngineUrl(value)) {
-                this.settings.engineURL = value;
-                this.parent.engineUrl.setText(value);
-            }
-        }
+    //     void engineUrl(const string value) {
+    //         if (validateEngineUrl(value)) {
+    //             this.settings.engineURL = value;
+    //             this.parent.engineUrl.setText(value);
+    //         }
+    //     }
 
-        void engineName(const string value) {
-            assert((["Custom", ""] ~ this.engines.keys).canFind(value),
-                "Search engine name is an unexpected value: " ~ value);
+    //     void engineName(const string value) {
+    //         assert((["Custom", ""] ~ this.engines.keys).canFind(value),
+    //             "Search engine name is an unexpected value: " ~ value);
 
-            switch (value) {
-                case "Custom":
-                    goto case "";
-                case "":
-                    this.engineUrl = "";
-                    break;
-                default:
-                    foreach(string item; this.engines.keys)
-                        if (value == item) {
-                            this.engineUrl = this.engines[item];
-                            this.parent.engineUrl.setText(this.engineUrl);
-                            this.parent.engineName.setCurrentText(this.engineName);
-                            break;
-                        }
-            }
-        }
+    //         switch (value) {
+    //             case "Custom":
+    //                 goto case "";
+    //             case "":
+    //                 this.engineUrl = "";
+    //                 break;
+    //             default:
+    //                 foreach(string item; this.engines.keys)
+    //                     if (value == item) {
+    //                         this.engineUrl = this.engines[item];
+    //                         this.parent.engineUrl.setText(this.engineUrl);
+    //                         // this.parent.engineName.setCurrentText(this.engineName);
+    //                         break;
+    //                     }
+    //         }
+    //     }
 
-        string browserPath() {
-            return this.settings.browserPath;
-        }
+    //     string browserPath() {
+    //         return this.settings.browserPath;
+    //     }
 
-        string browserName() {
-            if (this.browserPath == "")
-                return "System Default";
+    //     string browserName() {
+    //         if (this.browserPath == "")
+    //             return "System Default";
 
-            foreach (string item; this.browsers.keys)
-                if (this.browsers[item] == this.browserPath)
-                    return item;
+    //         foreach (string item; this.browsers.keys)
+    //             if (this.browsers[item] == this.browserPath)
+    //                 return item;
             
-            return "Custom";
-        }
+    //         return "Custom";
+    //     }
 
-        string engineUrl() {
-            return this.settings.engineURL;
-        }
+    //     string engineUrl() {
+    //         return this.settings.engineURL;
+    //     }
 
-        string engineName() {
-            foreach (string item; this.engines.keys)
-                if (this.engines[item] == this.engineUrl)
-                    return item;
+    //     string engineName() {
+    //         foreach (string item; this.engines.keys)
+    //             if (this.engines[item] == this.engineUrl)
+    //                 return item;
 
-            return "Custom";
-        }
-    }
+    //         return "Custom";
+    //     }
+    // }
 }
 
 // void main(string[] args) {
